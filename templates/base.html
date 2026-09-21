@@ -1,0 +1,40 @@
+{{define "base"}}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{.Site.SEO.Title}}</title>
+  <meta name="description" content="{{.Site.SEO.Description}}">
+  <meta name="theme-color" content="#1f150e">
+  <meta property="og:title" content="{{.Site.SEO.Title}}">
+  <meta property="og:description" content="{{.Site.SEO.Description}}">
+  <meta property="og:type" content="website">
+  {{- /* htmx 4: indicator CSS is shipped in app.css so CSP can forbid inline styles. */}}
+  <meta name="htmx-config" content='{"includeIndicatorCSS":false,"defaultTimeout":20000}'>
+  <link rel="icon" href="{{asset "img/favicon.svg"}}" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="{{asset "css/app.css"}}">
+  {{- if .Preload}}
+  <link rel="preload" as="image" href="{{.Preload}}" fetchpriority="high">
+  {{- end}}
+  <script src="{{asset "js/theme.js"}}"></script>
+  <script src="{{asset "js/htmx.min.js"}}" defer></script>
+  <script src="{{asset "js/app.js"}}" defer></script>
+</head>
+<body>
+  <a href="#main" class="sr-only z-50 rounded-lg bg-accent-500 px-4 py-2 font-semibold text-white focus:not-sr-only focus:fixed focus:top-3 focus:left-3">Skip to content</a>
+  {{template "components/navbar" .}}
+  <main id="main">
+    {{template "content" .}}
+  </main>
+  {{template "components/footer" .}}
+  {{- if .ShowPlaceholderBanner}}
+  <div role="note" class="fixed bottom-3 left-3 z-50 max-w-72 rounded-lg bg-amber-300 px-3 py-2 text-xs font-semibold text-amber-950 shadow-lg">
+    Development build — this page contains placeholder content. Edit internal/content/site.go.
+  </div>
+  {{- end}}
+</body>
+</html>
+{{end}}

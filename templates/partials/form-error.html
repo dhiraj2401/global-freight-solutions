@@ -1,0 +1,9 @@
+{{define "partials/form-error"}}
+{{- if or .FormError .Errors}}
+<div role="alert" tabindex="-1" data-autofocus
+     class="mb-4 flex gap-3 rounded-lg border px-4 py-3 text-sm {{if .Dark}}border-red-400/30 bg-red-500/10 text-red-200{{else}}border-red-200 bg-red-50 text-red-800{{end}}">
+  {{icon "shield" "mt-0.5 size-4 shrink-0"}}
+  <p>{{if .FormError}}{{.FormError}}{{else}}Please correct the highlighted fields and try again.{{end}}</p>
+</div>
+{{- end}}
+{{end}}

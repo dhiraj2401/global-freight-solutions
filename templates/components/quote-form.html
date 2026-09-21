@@ -1,0 +1,80 @@
+{{- /*
+  Quote forms. Each form swaps its own wrapper (outerHTML) with the server's
+  response: the re-rendered form with inline errors (422/403/429/5xx — htmx 4
+  swaps every status except 204/304) or the success partial (200).
+  Without JavaScript the same forms POST normally and get a full page back.
+*/ -}}
+
+{{define "components/quote-form-compact"}}
+<div id="quote-compact" class="rounded-2xl bg-surface p-6 text-ink shadow-2xl shadow-black/30 ring-1 ring-black/5 sm:p-7">
+  <h2 class="font-display text-2xl font-bold tracking-tight">{{.Site.Hero.FormTitle}}</h2>
+  <p class="mt-1 text-sm text-ink-muted">{{.Site.Hero.FormSubtitle}}</p>
+
+  <form action="/api/quote" method="post" class="relative mt-5 space-y-3"
+        hx-post="/api/quote"
+        hx-target="#quote-compact"
+        hx-swap="outerHTML"
+        hx-indicator="#quote-compact-submit"
+        hx-disable="find button">
+    <input type="hidden" name="variant" value="compact">
+    {{template "partials/form-error" .}}
+    {{template "partials/honeypot" .}}
+
+    {{template "partials/field" (dict "Form" . "Name" "full_name" "Label" "Your name" "Placeholder" "Your name" "Type" "text" "Autocomplete" "name" "Required" true "Maxlength" 120 "Value" .Values.FullName)}}
+    {{template "partials/field" (dict "Form" . "Name" "origin" "Label" "Origin" "Placeholder" "Origin city / state" "Type" "text" "Autocomplete" "off" "Required" true "Maxlength" 120 "Value" .Values.Origin)}}
+    {{template "partials/field" (dict "Form" . "Name" "destination" "Label" "Destination" "Placeholder" "Destination city / state" "Type" "text" "Autocomplete" "off" "Required" true "Maxlength" 120 "Value" .Values.Destination)}}
+    {{template "partials/service-select" .}}
+    {{template "partials/field" (dict "Form" . "Name" "weight_kg" "Label" "Approximate weight (kg)" "Placeholder" "Approximate weight (kg)" "Type" "number" "Inputmode" "decimal" "Step" "any" "Min" "0" "Value" .Values.WeightKg)}}
+    {{template "partials/field" (dict "Form" . "Name" "email" "Label" "Email address" "Placeholder" "Your email address" "Type" "email" "Autocomplete" "email" "Required" true "Maxlength" 254 "Value" .Values.Email)}}
+    {{template "partials/field" (dict "Form" . "Name" "phone" "Label" "Phone number" "Placeholder" "Phone number" "Type" "tel" "Inputmode" "tel" "Autocomplete" "tel" "Required" true "Minlength" 7 "Maxlength" 32 "Pattern" phonePattern "Title" phoneHint "Value" .Values.Phone)}}
+
+    <div class="pt-1">
+      {{template "partials/submit-button" (dict "ID" "quote-compact-submit" "Label" "Request Free Quote")}}
+    </div>
+    <p class="flex items-center justify-center gap-1.5 text-xs text-ink-muted">{{icon "lock" "size-3.5"}} {{.Site.Hero.FormFootnote}}</p>
+  </form>
+</div>
+{{end}}
+
+{{define "components/quote-form-full"}}
+<div id="quote-full" class="rounded-2xl border border-white/10 bg-espresso-900/85 p-6 text-white shadow-2xl shadow-black/40 backdrop-blur-sm sm:p-8">
+  <h2 class="font-display text-2xl font-bold tracking-tight">{{.Site.Contact.FormTitle}}</h2>
+
+  <form action="/api/quote" method="post" class="relative mt-6"
+        hx-post="/api/quote"
+        hx-target="#quote-full"
+        hx-swap="outerHTML"
+        hx-indicator="#quote-full-submit"
+        hx-disable="find button">
+    <input type="hidden" name="variant" value="full">
+    {{template "partials/form-error" .}}
+    {{template "partials/honeypot" .}}
+
+    <div class="grid gap-4 sm:grid-cols-2">
+      {{template "partials/field" (dict "Form" . "Name" "first_name" "Label" "First name" "Placeholder" "John" "Type" "text" "Autocomplete" "given-name" "Required" true "Maxlength" 80 "Value" .Values.FirstName)}}
+      {{template "partials/field" (dict "Form" . "Name" "last_name" "Label" "Last name" "Placeholder" "Doe" "Type" "text" "Autocomplete" "family-name" "Maxlength" 80 "Value" .Values.LastName)}}
+      {{template "partials/field" (dict "Form" . "Name" "company_name" "Label" "Company name" "Placeholder" "Enter company name" "Type" "text" "Autocomplete" "organization" "Maxlength" 120 "Value" .Values.Company)}}
+      {{template "partials/field" (dict "Form" . "Name" "phone" "Label" "Phone number" "Placeholder" "+1 (713) 555-0198" "Type" "tel" "Inputmode" "tel" "Autocomplete" "tel" "Required" true "Minlength" 7 "Maxlength" 32 "Pattern" phonePattern "Title" phoneHint "Value" .Values.Phone)}}
+      {{template "partials/field" (dict "Form" . "Name" "email" "Label" "Email address" "Placeholder" "john.doe@company.com" "Type" "email" "Autocomplete" "email" "Required" true "Maxlength" 254 "Value" .Values.Email)}}
+      {{template "partials/service-select" .}}
+      {{template "partials/field" (dict "Form" . "Name" "origin" "Label" "Origin city" "Placeholder" "Departure city" "Type" "text" "Autocomplete" "off" "Required" true "Maxlength" 120 "Value" .Values.Origin)}}
+      {{template "partials/field" (dict "Form" . "Name" "destination" "Label" "Destination city" "Placeholder" "Delivery city" "Type" "text" "Autocomplete" "off" "Required" true "Maxlength" 120 "Value" .Values.Destination)}}
+    </div>
+
+    {{- $err := index .Errors "cargo_details"}}
+    <div class="mt-4">
+      <label for="quote-full-cargo_details" class="field-label text-white/70">Cargo details</label>
+      <textarea id="quote-full-cargo_details" name="cargo_details" rows="4" maxlength="2000"
+                placeholder="Dimensions, weights, hazardous class or special instructions"
+                class="field-dark resize-y"
+                {{- if $err}} aria-invalid="true" aria-describedby="quote-full-cargo_details-error"{{end}}>{{.Values.CargoDetails}}</textarea>
+      {{- if $err}}<p id="quote-full-cargo_details-error" class="field-error-dark">{{$err}}</p>{{end}}
+    </div>
+
+    <div class="mt-6">
+      {{template "partials/submit-button" (dict "ID" "quote-full-submit" "Label" "Send Quote Request")}}
+    </div>
+    <p class="mt-3 flex items-center justify-center gap-1.5 text-xs text-white/60">{{icon "shield-check" "size-3.5"}} {{.Site.Contact.FormFootnote}}</p>
+  </form>
+</div>
+{{end}}

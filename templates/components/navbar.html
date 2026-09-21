@@ -1,0 +1,43 @@
+{{define "components/brand"}}
+<span class="inline-flex size-9 items-center justify-center rounded-lg bg-accent-500 text-white">{{icon "truck" "size-5"}}</span>
+<span class="leading-none">
+  <span class="block font-display text-[1.05rem] font-bold tracking-tight">{{.Name}}</span>
+  <span class="mt-0.5 block text-[0.62rem] font-semibold uppercase tracking-[0.22em] opacity-70">{{.Descriptor}}</span>
+</span>
+{{end}}
+
+{{define "components/navbar"}}
+<header class="sticky top-0 z-40 border-b border-line/80 bg-surface/90 backdrop-blur-md">
+  <nav class="container-page flex h-16 items-center justify-between gap-6" aria-label="Primary">
+    <a href="/" class="flex items-center gap-2.5 text-ink" aria-label="{{.Site.Brand.Name}} home">
+      {{template "components/brand" .Site.Brand}}
+    </a>
+
+    <ul class="hidden items-center gap-7 lg:flex">
+      {{- range .Site.Nav}}
+      <li><a href="/{{.Href}}" class="text-sm font-medium text-ink-muted transition-colors hover:text-accent-500">{{.Label}}</a></li>
+      {{- end}}
+    </ul>
+
+    <div class="flex items-center gap-1.5">
+      <button type="button" data-theme-toggle class="inline-flex size-10 items-center justify-center rounded-lg text-ink-muted transition-colors hover:bg-surface-muted hover:text-ink" aria-label="Toggle dark mode">
+        <span class="dark:hidden">{{icon "moon" "size-5"}}</span>
+        <span class="hidden dark:inline">{{icon "sun" "size-5"}}</span>
+      </button>
+      <a href="/#contact" class="btn-primary ml-1.5 hidden sm:inline-flex">Get A Free Quote {{icon "arrow-right" "size-4"}}</a>
+      <button type="button" data-nav-toggle aria-controls="mobile-nav" aria-expanded="false" aria-label="Open menu" class="inline-flex size-10 items-center justify-center rounded-lg text-ink transition-colors hover:bg-surface-muted lg:hidden">
+        {{icon "menu" "size-6"}}
+      </button>
+    </div>
+  </nav>
+
+  <div id="mobile-nav" class="border-t border-line bg-surface lg:hidden" hidden>
+    <ul class="container-page flex flex-col py-3">
+      {{- range .Site.Nav}}
+      <li><a href="/{{.Href}}" data-nav-link class="block rounded-lg px-2 py-3 text-base font-medium text-ink hover:bg-surface-muted">{{.Label}}</a></li>
+      {{- end}}
+      <li class="pt-2 pb-1"><a href="/#contact" data-nav-link class="btn-primary w-full py-3.5">Get A Free Quote {{icon "arrow-right" "size-4"}}</a></li>
+    </ul>
+  </div>
+</header>
+{{end}}

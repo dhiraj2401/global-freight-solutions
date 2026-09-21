@@ -1,0 +1,31 @@
+{{define "partials/form-success"}}
+<div id="quote-{{.Variant}}" role="status" tabindex="-1" data-autofocus
+     class="rounded-2xl p-6 sm:p-8 {{if .Dark}}border border-white/10 bg-espresso-900/85 text-white shadow-2xl shadow-black/40{{else}}bg-surface text-ink shadow-2xl shadow-black/30 ring-1 ring-black/5{{end}}">
+  <span class="inline-flex size-12 items-center justify-center rounded-full bg-accent-500 text-white">{{icon "check" "size-6"}}</span>
+  <h2 class="mt-5 font-display text-2xl font-bold tracking-tight">Thanks{{with .FirstName}}, {{.}}{{end}}. Your request is in.</h2>
+  <p class="mt-2 text-sm leading-relaxed {{if .Dark}}text-white/75{{else}}text-ink-muted{{end}}">
+    An account manager will review your shipment and contact you within {{.ResponseTime}} with a tailored quote.
+  </p>
+  {{- if .Reference}}
+  <div class="mt-5 rounded-lg border border-dashed px-4 py-3 {{if .Dark}}border-white/20 bg-white/5{{else}}border-line bg-surface-muted{{end}}">
+    <p class="text-xs font-semibold uppercase tracking-wider {{if .Dark}}text-white/60{{else}}text-ink-muted{{end}}">Your reference</p>
+    <p class="mt-1 font-mono text-lg font-semibold tracking-wide">{{.Reference}}</p>
+  </div>
+  {{- end}}
+  <p class="mt-5 text-sm {{if .Dark}}text-white/75{{else}}text-ink-muted{{end}}">
+    Need it sooner? Call <a href="{{tel .Phone}}" class="font-semibold text-accent-500 hover:underline">{{.Phone}}</a>.
+  </p>
+</div>
+{{end}}
+
+{{define "partials/track-result"}}
+{{- if .Error}}
+<p role="alert" class="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-300">{{.Error}}</p>
+{{- else}}
+<div class="rounded-lg border border-line bg-surface-muted px-4 py-3 text-sm">
+  <p class="font-mono font-semibold tracking-wide">{{.Number}}</p>
+  <p class="mt-1 text-ink-muted">{{.Message}}</p>
+  <p class="mt-3"><a href="{{tel .Phone}}" class="inline-flex items-center gap-2 font-semibold text-accent-500 hover:underline">{{icon "phone" "size-4"}} {{.Phone}}</a></p>
+</div>
+{{- end}}
+{{end}}

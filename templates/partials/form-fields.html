@@ -1,0 +1,65 @@
+{{- /* Shared form building blocks. */ -}}
+
+{{define "partials/field"}}
+{{- $id := printf "quote-%s-%s" .Form.Variant .Name}}
+{{- $err := index .Form.Errors .Name}}
+<div>
+  <label for="{{$id}}" class="{{if .Form.Compact}}sr-only{{else}}field-label text-white/70{{end}}">{{.Label}}{{if .Required}}<span class="sr-only"> (required)</span>{{end}}</label>
+  <input id="{{$id}}" name="{{.Name}}" type="{{.Type}}" value="{{.Value}}"
+         class="{{if .Form.Dark}}field-dark{{else}}field-light{{end}}"
+         {{- with .Placeholder}} placeholder="{{.}}"{{end}}
+         {{- with .Autocomplete}} autocomplete="{{.}}"{{end}}
+         {{- with .Inputmode}} inputmode="{{.}}"{{end}}
+         {{- with .Step}} step="{{.}}"{{end}}
+         {{- with .Min}} min="{{.}}"{{end}}
+         {{- with .Minlength}} minlength="{{.}}"{{end}}
+         {{- with .Maxlength}} maxlength="{{.}}"{{end}}
+         {{- with .Pattern}} pattern="{{.}}"{{end}}
+         {{- with .Title}} title="{{.}}"{{end}}
+         {{- if .Required}} required{{end}}
+         {{- if $err}} aria-invalid="true" aria-describedby="{{$id}}-error"{{end}}>
+  {{- if $err}}
+  <p id="{{$id}}-error" class="{{if .Form.Dark}}field-error-dark{{else}}field-error{{end}}">{{$err}}</p>
+  {{- end}}
+</div>
+{{end}}
+
+{{define "partials/service-select"}}
+{{- $id := printf "quote-%s-service_type" .Variant}}
+{{- $err := index .Errors "service_type"}}
+<div>
+  <label for="{{$id}}" class="{{if .Compact}}sr-only{{else}}field-label text-white/70{{end}}">Service required<span class="sr-only"> (required)</span></label>
+  <div class="relative">
+    <select id="{{$id}}" name="service_type" required
+            class="{{if .Dark}}field-dark *:bg-espresso-900 *:text-white{{else}}field-light{{end}} appearance-none pr-10"
+            {{- if $err}} aria-invalid="true" aria-describedby="{{$id}}-error"{{end}}>
+      <option value=""{{if not .Values.ServiceType}} selected{{end}} disabled>Select service type</option>
+      {{- range .ServiceOptions}}
+      <option value="{{.Value}}"{{if eq .Value $.Values.ServiceType}} selected{{end}}>{{.Label}}</option>
+      {{- end}}
+    </select>
+    <span class="pointer-events-none absolute inset-y-0 right-3 flex items-center {{if .Dark}}text-white/50{{else}}text-ink-muted{{end}}">{{icon "chevron-down" "size-4"}}</span>
+  </div>
+  {{- if $err}}
+  <p id="{{$id}}-error" class="{{if .Dark}}field-error-dark{{else}}field-error{{end}}">{{$err}}</p>
+  {{- end}}
+</div>
+{{end}}
+
+{{define "partials/submit-button"}}
+<button id="{{.ID}}" type="submit" class="btn-primary relative w-full py-3.5 text-base">
+  <span class="htmx-hide-on-request inline-flex items-center gap-2">{{.Label}} {{icon "arrow-right" "size-4"}}</span>
+  <span class="htmx-indicator absolute inset-0 flex items-center justify-center gap-2" aria-hidden="true">
+    <svg class="size-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-90" fill="currentColor" d="M4 12a8 8 0 0 1 8-8v4a4 4 0 0 0-4 4H4z"/></svg>
+    Sending…
+  </span>
+</button>
+{{end}}
+
+{{define "partials/honeypot"}}
+{{- /* Bots fill every field; humans never see this one. */}}
+<div class="absolute -left-[9999px] top-0 size-px overflow-hidden" aria-hidden="true">
+  <label for="quote-{{.Variant}}-website">Leave this field empty</label>
+  <input id="quote-{{.Variant}}-website" type="text" name="website" tabindex="-1" autocomplete="off">
+</div>
+{{end}}

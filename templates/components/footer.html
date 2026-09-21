@@ -1,0 +1,48 @@
+{{define "components/footer"}}
+<footer class="bg-espresso-900 text-white/80">
+  <div class="container-page grid gap-10 py-16 sm:grid-cols-2 lg:grid-cols-4">
+    <div>
+      <a href="/" class="flex items-center gap-2.5 text-white" aria-label="{{.Site.Brand.Name}} home">
+        {{template "components/brand" .Site.Brand}}
+      </a>
+      <p class="mt-5 max-w-xs text-sm leading-relaxed text-white/70">{{.Site.Footer.Blurb}}</p>
+      <ul class="mt-6 flex gap-3">
+        {{- range .Site.Footer.Social}}
+        <li><a href="{{href .Href}}" class="inline-flex size-9 items-center justify-center rounded-full border border-white/20 text-white/80 transition-colors hover:border-accent-400 hover:text-accent-300" aria-label="{{.Label}}">{{icon .Icon "size-4"}}</a></li>
+        {{- end}}
+      </ul>
+    </div>
+
+    {{- range .Site.Footer.Columns}}
+    <div>
+      <h2 class="font-display text-base font-semibold text-white">{{.Title}}</h2>
+      <ul class="mt-4 space-y-2.5 text-sm">
+        {{- range .Links}}
+        <li><a href="/{{.Href}}" class="transition-colors hover:text-accent-300">{{.Label}}</a></li>
+        {{- end}}
+      </ul>
+    </div>
+    {{- end}}
+
+    <div>
+      <h2 class="font-display text-base font-semibold text-white">Contact Info</h2>
+      <ul class="mt-4 space-y-3.5 text-sm">
+        <li class="flex gap-3"><span class="mt-0.5 text-accent-400">{{icon "phone" "size-4"}}</span><a href="{{tel .Site.Brand.Phone}}" class="hover:text-accent-300">{{.Site.Brand.Phone}}</a></li>
+        <li class="flex gap-3"><span class="mt-0.5 text-accent-400">{{icon "mail" "size-4"}}</span><a href="mailto:{{.Site.Brand.Email}}" class="hover:text-accent-300">{{.Site.Brand.Email}}</a></li>
+        <li class="flex gap-3"><span class="mt-0.5 text-accent-400">{{icon "map-pin" "size-4"}}</span><address class="not-italic">{{range .Site.Brand.Address}}<span class="block">{{.}}</span>{{end}}</address></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-white/10">
+    <div class="container-page flex flex-col gap-3 py-6 text-xs text-white/60 sm:flex-row sm:items-center sm:justify-between">
+      <p>© {{.Site.CopyrightYear}} {{.Site.Brand.Name}}. All rights reserved.</p>
+      <ul class="flex gap-6">
+        {{- range .Site.Footer.Legal}}
+        <li><a href="{{href .Href}}" class="hover:text-white">{{.Label}}</a></li>
+        {{- end}}
+      </ul>
+    </div>
+  </div>
+</footer>
+{{end}}

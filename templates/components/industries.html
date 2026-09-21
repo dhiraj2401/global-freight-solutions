@@ -1,0 +1,104 @@
+{{define "components/industries"}}
+{{- with .Site.Industries}}
+<section id="industries" class="bg-surface py-20 sm:py-24" aria-labelledby="industries-title">
+  <div class="container-page">
+    <div class="text-center" data-reveal>
+      <p class="eyebrow">{{.Eyebrow}}</p>
+      <h2 id="industries-title" class="heading-lg mt-3 text-balance">{{.Title}}</h2>
+    </div>
+    <ul class="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8 lg:gap-4">
+      {{- range .Items}}
+      <li class="flex flex-col items-center justify-center gap-3 rounded-2xl border border-line bg-surface px-3 py-6 text-center transition-colors duration-200 hover:border-accent-500/60" data-reveal>
+        <span class="icon-chip size-11 rounded-full">{{icon .Icon "size-5"}}</span>
+        <span class="text-sm leading-tight font-semibold">{{.Title}}</span>
+      </li>
+      {{- end}}
+    </ul>
+  </div>
+</section>
+{{- end}}
+{{end}}
+
+{{define "components/ports"}}
+{{- with .Site.Ports}}
+<section id="ports" class="grid border-y border-line lg:grid-cols-2" aria-labelledby="ports-title">
+  <div class="flex items-center bg-canvas px-5 py-16 sm:px-8 lg:py-24 lg:pr-16 lg:pl-[max(2rem,calc((100vw_-_80rem)/2_+_2rem))]">
+    <div class="max-w-lg" data-reveal>
+      <p class="eyebrow">{{.Eyebrow}}</p>
+      <h2 id="ports-title" class="heading-lg mt-4 text-balance">{{.Title}}</h2>
+      <p class="mt-4 leading-relaxed text-ink-muted">{{.Body}}</p>
+      <a href="{{href .CTA.Href}}" class="btn-primary mt-8 px-6 py-3.5">{{.CTA.Label}} {{icon "arrow-right" "size-4"}}</a>
+    </div>
+  </div>
+  <div class="relative isolate flex min-h-[26rem] items-end overflow-hidden bg-espresso-900 p-5 sm:p-8">
+    <div class="absolute inset-0 -z-10">
+      {{- if .Image.Src}}<img src="{{.Image.Src}}" alt="{{.Image.Alt}}" class="photo-cover" loading="lazy" decoding="async">{{else}}<div class="photo-fallback"></div>{{end}}
+      <div class="absolute inset-0 bg-linear-to-t from-espresso-950/75 via-espresso-950/15 to-transparent"></div>
+    </div>
+    <ul class="grid w-full grid-cols-2 gap-2.5 xl:grid-cols-4" aria-label="Ports served">
+      {{- range .Ports}}
+      <li class="flex items-center gap-2 rounded-lg bg-white/95 px-3 py-2.5 text-xs font-semibold text-espresso-900 shadow-sm">
+        <span class="shrink-0 text-accent-500">{{icon .Icon "size-4"}}</span>{{.Title}}
+      </li>
+      {{- end}}
+      <li class="col-span-2 xl:col-span-4">
+        <a href="/#contact" class="inline-flex items-center gap-2 rounded-lg border border-accent-500 bg-white/95 px-3 py-2.5 text-xs font-semibold text-accent-600 hover:bg-white">{{icon "plus" "size-4"}} {{.MoreLabel}}</a>
+      </li>
+    </ul>
+  </div>
+</section>
+{{- end}}
+{{end}}
+
+{{define "components/trusted-by"}}
+{{- with .Site.TrustedBy}}
+<section class="bg-surface py-12 sm:py-14" aria-labelledby="trusted-title">
+  <div class="container-page">
+    <h2 id="trusted-title" class="text-center text-xs font-semibold uppercase tracking-[0.18em] text-accent-500">{{.Eyebrow}}</h2>
+    <ul class="mt-7 flex flex-wrap items-center justify-center gap-x-10 gap-y-5 sm:gap-x-14">
+      {{- range .Logos}}
+      <li class="text-ink/55 transition-colors hover:text-ink {{if eq .Style "serif"}}font-serif text-xl font-semibold italic{{else if eq .Style "mono"}}font-mono text-lg font-bold tracking-[0.2em]{{else if eq .Style "wide"}}font-display text-xl font-extrabold tracking-[0.12em] uppercase{{else}}font-display text-2xl font-semibold tracking-tight lowercase{{end}}">{{.Name}}</li>
+      {{- end}}
+    </ul>
+  </div>
+</section>
+{{- end}}
+{{end}}
+
+{{define "components/carrier-partner"}}
+{{- with .Site.CarrierPartner}}
+<section id="carriers" class="relative isolate overflow-hidden bg-espresso-950 py-20 text-white sm:py-24" aria-labelledby="carrier-title">
+  <div class="absolute inset-0 -z-10">
+    {{- if .Image.Src}}<img src="{{.Image.Src}}" alt="" class="photo-cover" loading="lazy" decoding="async">{{else}}<div class="photo-fallback"></div>{{end}}
+    <div class="absolute inset-0 bg-espresso-950/85"></div>
+  </div>
+  <div class="container-page grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+    <div data-reveal>
+      <p class="eyebrow text-accent-400">{{.Eyebrow}}</p>
+      <h2 id="carrier-title" class="heading-lg mt-4">{{.Title}}</h2>
+      <p class="mt-4 max-w-md leading-relaxed text-white/75">{{.Body}}</p>
+      <ul class="mt-7 space-y-3">
+        {{- range .Benefits}}
+        <li class="flex items-center gap-3 text-sm font-medium"><span class="size-3.5 shrink-0 rounded-full bg-accent-500"></span>{{.}}</li>
+        {{- end}}
+      </ul>
+    </div>
+    <div class="rounded-2xl bg-surface p-6 text-ink shadow-2xl shadow-black/30 sm:p-8" data-reveal>
+      <h3 class="font-display text-xl font-bold">{{.CardTitle}}</h3>
+      <ol class="mt-6 space-y-5">
+        {{- range $i, $step := .Steps}}
+        <li class="flex gap-4">
+          <span class="inline-flex size-7 shrink-0 items-center justify-center rounded-full bg-accent-500 text-xs font-bold text-white">{{add $i 1}}</span>
+          <div>
+            <p class="text-sm font-bold">{{$step.Title}}</p>
+            <p class="text-xs text-ink-muted">{{$step.Text}}</p>
+          </div>
+        </li>
+        {{- end}}
+      </ol>
+      <a href="{{href .CTA.Href}}" class="btn-primary mt-7 w-full py-3.5">{{.CTA.Label}} {{icon "arrow-right" "size-4"}}</a>
+    </div>
+  </div>
+</section>
+{{- end}}
+{{end}}

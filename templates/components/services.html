@@ -1,0 +1,236 @@
+{{define "components/advantage"}}
+{{- with .Site.Advantage}}
+<section id="about" class="bg-canvas py-20 sm:py-28" aria-labelledby="advantage-title">
+  <div class="container-page grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+    <div data-reveal>
+      <p class="eyebrow">{{.Eyebrow}}</p>
+      <h2 id="advantage-title" class="heading-xl mt-4 text-balance">{{.Title}} <span class="text-accent-500">{{.TitleAccent}}</span></h2>
+      <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-muted">{{.Body}}</p>
+      <a href="{{href .CTA.Href}}" class="btn-primary mt-8 px-6 py-3.5">{{.CTA.Label}} {{icon "arrow-right" "size-4"}}</a>
+    </div>
+    <ol class="space-y-4">
+      {{- range .Points}}
+      <li class="flex gap-6 rounded-2xl bg-surface-muted p-6 ring-1 ring-line/60 sm:p-7" data-reveal>
+        <span class="font-display text-4xl leading-none font-bold text-accent-500" aria-hidden="true">{{.Number}}</span>
+        <div>
+          <h3 class="text-lg font-bold">{{.Title}}</h3>
+          <p class="mt-1.5 text-sm leading-relaxed text-ink-muted">{{.Text}}</p>
+        </div>
+      </li>
+      {{- end}}
+    </ol>
+  </div>
+</section>
+{{- end}}
+{{end}}
+
+{{define "components/metrics"}}
+{{- with .Site.Metrics}}
+<section id="performance" class="bg-canvas-alt py-20 sm:py-24" aria-labelledby="metrics-title">
+  <div class="container-page">
+    <div class="text-center" data-reveal>
+      <p class="eyebrow">{{.Eyebrow}}</p>
+      <h2 id="metrics-title" class="heading-lg mt-3 text-balance">{{.Title}}</h2>
+    </div>
+    <ul class="mt-12 grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-6">
+      {{- range .Stats}}
+      <li class="card flex flex-col items-center px-4 py-8 text-center shadow-sm" data-reveal>
+        <span class="icon-chip size-12 rounded-full">{{icon .Icon "size-5"}}</span>
+        <p class="mt-4 font-display text-4xl font-bold tracking-tight sm:text-5xl">{{.Value}}</p>
+        <p class="mt-1.5 text-sm text-ink-muted">{{.Label}}</p>
+      </li>
+      {{- end}}
+    </ul>
+    <ul class="mt-4 grid gap-4 md:grid-cols-3 lg:mt-6 lg:gap-6">
+      {{- range .Highlights}}
+      <li class="card flex items-center gap-4 p-5 shadow-sm" data-reveal>
+        <span class="icon-chip size-11">{{icon .Icon "size-5"}}</span>
+        <div>
+          <h3 class="text-sm font-bold">{{.Title}}</h3>
+          <p class="mt-0.5 text-sm text-ink-muted">{{.Text}}</p>
+        </div>
+      </li>
+      {{- end}}
+    </ul>
+  </div>
+</section>
+{{- end}}
+{{end}}
+
+{{define "components/account-manager"}}
+{{- with .Site.AccountManager}}
+<section id="account-managers" class="bg-canvas py-20 sm:py-28" aria-labelledby="am-title">
+  <div class="container-page grid items-center gap-10 lg:grid-cols-12 lg:gap-8">
+    <div class="lg:col-span-4" data-reveal>
+      <p class="eyebrow">{{.Eyebrow}}</p>
+      <h2 id="am-title" class="mt-4 font-display text-4xl leading-[1.08] font-bold tracking-tight sm:text-5xl">
+        {{- range .TitleLines}}<span class="block">{{.}}</span>{{end -}}
+      </h2>
+      <p class="mt-5 leading-relaxed text-ink-muted">{{.Body}}</p>
+      <ul class="mt-8 space-y-5">
+        {{- range .Features}}
+        <li class="flex gap-4">
+          <span class="inline-flex size-11 shrink-0 items-center justify-center rounded-lg bg-accent-500 text-white">{{icon .Icon "size-5"}}</span>
+          <div>
+            <h3 class="font-bold">{{.Title}}</h3>
+            <p class="text-sm text-ink-muted">{{.Text}}</p>
+          </div>
+        </li>
+        {{- end}}
+      </ul>
+    </div>
+
+    <div class="space-y-4 lg:col-span-4" data-reveal>
+      <div class="rounded-2xl bg-panel p-7 text-white shadow-xl shadow-espresso-900/10">
+        <h3 class="text-lg font-bold">{{.ChecklistTitle}}</h3>
+        <ul class="mt-5 space-y-3.5">
+          {{- range .Checklist}}
+          <li class="flex items-center gap-3 text-sm text-white/90">
+            <span class="inline-flex size-5 items-center justify-center rounded bg-accent-500 text-white">{{icon "check" "size-3.5"}}</span>{{.}}
+          </li>
+          {{- end}}
+        </ul>
+      </div>
+      <div class="flex items-center gap-4 rounded-2xl bg-panel p-5 text-white">
+        <span class="inline-flex size-11 shrink-0 items-center justify-center rounded-full bg-accent-500">{{icon "headset" "size-5"}}</span>
+        <div>
+          <p class="font-bold">{{.CalloutTitle}}</p>
+          <p class="text-sm text-white/70">{{.CalloutText}}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:col-span-4" data-reveal>
+      <div class="relative aspect-[4/5] max-h-[34rem] w-full overflow-hidden rounded-2xl bg-espresso-800">
+        {{- if .Image.Src}}
+        <img src="{{.Image.Src}}" alt="{{.Image.Alt}}" class="photo-cover" loading="lazy" decoding="async">
+        {{- else}}
+        <div class="photo-fallback"></div>
+        <div class="absolute inset-0 flex flex-col justify-end p-7 text-white">
+          <span class="inline-flex size-14 items-center justify-center rounded-2xl bg-accent-500">{{icon "headset" "size-7"}}</span>
+          <p class="mt-5 font-display text-2xl font-bold">Talk to your account manager</p>
+          <a href="{{tel $.Site.Brand.Phone}}" class="mt-1 text-lg font-semibold text-accent-300 hover:underline">{{$.Site.Brand.Phone}}</a>
+          <p class="mt-1 text-sm text-white/60">{{$.Site.Brand.Hours}}</p>
+        </div>
+        {{- end}}
+      </div>
+    </div>
+  </div>
+</section>
+{{- end}}
+{{end}}
+
+{{define "components/why-us"}}
+{{- with .Site.WhyUs}}
+<section id="fleet" class="bg-canvas-alt py-20 sm:py-24" aria-labelledby="why-title">
+  <div class="container-page">
+    <div class="text-center" data-reveal>
+      <p class="eyebrow">{{.Eyebrow}}</p>
+      <h2 id="why-title" class="heading-lg mt-3 text-balance">{{.Title}}</h2>
+    </div>
+    <ul class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+      {{- range .Items}}
+      <li class="card p-6 transition-shadow duration-300 hover:shadow-lg hover:shadow-espresso-900/5 sm:p-7" data-reveal>
+        <span class="icon-chip size-10">{{icon .Icon "size-5"}}</span>
+        <h3 class="mt-5 font-display text-lg font-bold">{{.Title}}</h3>
+        <p class="mt-1.5 text-sm text-ink-muted">{{.Text}}</p>
+      </li>
+      {{- end}}
+    </ul>
+  </div>
+</section>
+{{- end}}
+{{end}}
+
+{{define "components/process"}}
+{{- with .Site.Process}}
+<section id="how-it-works" class="bg-canvas py-20 sm:py-24" aria-labelledby="process-title">
+  <div class="container-page">
+    <div class="text-center" data-reveal>
+      <p class="eyebrow">{{.Eyebrow}}</p>
+      <h2 id="process-title" class="heading-lg mt-3 text-balance">{{.Title}}</h2>
+    </div>
+    <div class="relative mt-14">
+      <div class="absolute top-6 right-[10%] left-[10%] hidden border-t-2 border-dashed border-line lg:block" aria-hidden="true"></div>
+      <ol class="relative grid gap-10 sm:grid-cols-2 lg:grid-cols-5 lg:gap-4">
+        {{- range $i, $step := .Steps}}
+        <li class="flex flex-col items-center text-center" data-reveal>
+          <span class="inline-flex size-12 items-center justify-center rounded-full bg-accent-500 text-white shadow-[0_0_0_8px_var(--color-chip)]">{{icon $step.Icon "size-5"}}</span>
+          <h3 class="mt-6 font-bold"><span class="sr-only">Step {{add $i 1}}: </span>{{$step.Title}}</h3>
+          <p class="mt-1 text-sm text-ink-muted">{{$step.Text}}</p>
+        </li>
+        {{- end}}
+      </ol>
+    </div>
+  </div>
+</section>
+{{- end}}
+{{end}}
+
+{{define "components/services"}}
+{{- with .Site.Services}}
+<section id="services" class="bg-canvas-alt py-20 sm:py-24" aria-labelledby="services-title">
+  <div class="container-page">
+    <div class="flex flex-wrap items-end justify-between gap-4" data-reveal>
+      <div>
+        <p class="eyebrow">{{.Eyebrow}}</p>
+        <h2 id="services-title" class="heading-lg mt-3">{{.Title}}</h2>
+      </div>
+      <a href="{{href .CTA.Href}}" class="inline-flex items-center gap-2 text-sm font-semibold text-accent-500 hover:text-accent-600">{{.CTA.Label}} {{icon "arrow-right" "size-4"}}</a>
+    </div>
+    <ul class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+      {{- range .Items}}
+      <li data-reveal>
+        <a href="{{href .Href}}" class="group card block h-full overflow-hidden transition-shadow duration-300 hover:shadow-xl hover:shadow-espresso-900/10">
+          <div class="relative aspect-[16/9] overflow-hidden bg-espresso-800">
+            {{- if .Image.Src}}
+            <img src="{{.Image.Src}}" alt="{{.Image.Alt}}" class="photo-cover transition-transform duration-700 ease-out group-hover:scale-105" loading="lazy" decoding="async">
+            {{- else}}
+            <div class="photo-fallback"></div>
+            <span class="absolute inset-0 flex items-center justify-center text-white/80">{{icon .Icon "size-12"}}</span>
+            {{- end}}
+          </div>
+          <div class="p-5">
+            <h3 class="font-bold">{{.Title}}</h3>
+            <p class="mt-1 text-sm text-ink-muted">{{.Text}}</p>
+            <span class="mt-4 inline-flex size-8 items-center justify-center rounded-full border border-line text-accent-500 transition-colors group-hover:border-accent-500 group-hover:bg-accent-500 group-hover:text-white" aria-hidden="true">{{icon "arrow-right" "size-4"}}</span>
+          </div>
+        </a>
+      </li>
+      {{- end}}
+    </ul>
+  </div>
+</section>
+{{- end}}
+{{end}}
+
+{{define "components/warehousing"}}
+{{- with .Site.Warehousing}}
+<section id="warehousing" class="relative isolate overflow-hidden bg-espresso-950 py-20 text-white sm:py-28" aria-labelledby="warehousing-title">
+  <div class="absolute inset-0 -z-10">
+    {{- if .Image.Src}}<img src="{{.Image.Src}}" alt="" class="photo-cover" loading="lazy" decoding="async">{{else}}<div class="photo-fallback"></div>{{end}}
+    <div class="absolute inset-0 bg-espresso-950/80"></div>
+  </div>
+  <div class="container-page grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+    <div data-reveal>
+      <p class="eyebrow text-accent-400">{{.Eyebrow}}</p>
+      <h2 id="warehousing-title" class="mt-4 font-display text-4xl leading-tight font-bold tracking-tight text-balance sm:text-5xl">{{.Title}}</h2>
+      <p class="mt-4 max-w-lg text-white/75">{{.Body}}</p>
+      <a href="{{href .CTA.Href}}" class="btn-primary mt-8 px-6 py-3.5">{{.CTA.Label}} {{icon "arrow-right" "size-4"}}</a>
+    </div>
+    <div class="grid gap-4 sm:grid-cols-2">
+      {{- range .Cards}}
+      <div class="rounded-2xl bg-surface p-6 text-ink shadow-xl shadow-black/20 ring-1 ring-line/50" data-reveal>
+        <h3 class="text-lg font-bold">{{.Title}}</h3>
+        <ul class="mt-4 space-y-2.5">
+          {{- range .Items}}
+          <li class="flex items-start gap-2.5 text-sm"><span class="mt-0.5 text-accent-500">{{icon "check" "size-4"}}</span>{{.}}</li>
+          {{- end}}
+        </ul>
+      </div>
+      {{- end}}
+    </div>
+  </div>
+</section>
+{{- end}}
+{{end}}

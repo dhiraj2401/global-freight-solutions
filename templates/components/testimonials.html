@@ -1,0 +1,110 @@
+{{define "components/testimonials"}}
+{{- with .Site.Testimonials}}
+<section id="testimonials" class="bg-canvas py-20 sm:py-24" aria-labelledby="testimonials-title">
+  <div class="container-page">
+    <div class="text-center" data-reveal>
+      <p class="eyebrow">{{.Eyebrow}}</p>
+      <h2 id="testimonials-title" class="heading-lg mt-3 text-balance">{{.Title}}</h2>
+    </div>
+    <ul class="mt-12 grid gap-5 md:grid-cols-3 lg:gap-6">
+      {{- range .Items}}
+      <li data-reveal>
+        <figure class="card flex h-full flex-col p-6 sm:p-7">
+          <div class="flex gap-0.5 text-amber-500" role="img" aria-label="Rated {{.Rating}} out of 5">
+            {{- range .Stars}}{{icon "star" "size-4 fill-current"}}{{end -}}
+          </div>
+          <blockquote class="mt-4 flex-1 text-[0.95rem] leading-relaxed text-ink/85">
+            <p>“{{.Quote}}”</p>
+          </blockquote>
+          <figcaption class="mt-6 flex items-center gap-3">
+            <span class="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-espresso-800 text-sm font-bold text-white" aria-hidden="true">{{.Initials}}</span>
+            <span>
+              <span class="block text-sm font-bold">{{.Name}}</span>
+              <span class="block text-xs text-ink-muted">{{.Role}}, {{.Company}}</span>
+            </span>
+          </figcaption>
+        </figure>
+      </li>
+      {{- end}}
+    </ul>
+  </div>
+</section>
+{{- end}}
+{{end}}
+
+{{define "components/contact"}}
+{{- with .Site.Contact}}
+<section id="contact" class="relative isolate overflow-hidden bg-espresso-950 py-20 text-white sm:py-24" aria-labelledby="contact-title">
+  <div class="absolute inset-0 -z-10">
+    {{- if .Image.Src}}<img src="{{.Image.Src}}" alt="" class="photo-cover" loading="lazy" decoding="async">{{else}}<div class="photo-fallback"></div>{{end}}
+    <div class="absolute inset-0 bg-espresso-950/80"></div>
+  </div>
+  <div class="container-page grid items-start gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-10">
+    <div class="rounded-2xl border border-white/10 bg-espresso-900/70 p-6 backdrop-blur-sm sm:p-8" data-reveal>
+      <span class="inline-flex items-center gap-2 rounded-full border border-accent-500/70 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-accent-300">
+        <span class="size-1.5 rounded-full bg-accent-500"></span>{{.Badge}}
+      </span>
+      <h2 id="contact-title" class="mt-5 font-display text-4xl leading-tight font-bold tracking-tight text-balance">{{.Title}}</h2>
+      <p class="mt-4 leading-relaxed text-white/75">{{.Body}}</p>
+      <ul class="mt-8 space-y-5">
+        {{- range .Details}}
+        <li class="flex items-center gap-4">
+          <span class="inline-flex size-10 shrink-0 items-center justify-center rounded-lg bg-white/5 text-accent-400">{{icon .Icon "size-5"}}</span>
+          <div>
+            <p class="text-xs text-white/60">{{.Label}}</p>
+            {{- if .Href}}
+            <a href="{{href .Href}}" class="font-semibold hover:text-accent-300">{{.Value}}</a>
+            {{- else}}
+            <p class="font-semibold">{{.Value}}</p>
+            {{- end}}
+          </div>
+        </li>
+        {{- end}}
+      </ul>
+    </div>
+    <div data-reveal>
+      {{template "components/quote-form-full" $.FullForm}}
+    </div>
+  </div>
+</section>
+{{- end}}
+{{end}}
+
+{{define "components/track-dialog"}}
+{{- with .Site.Track}}
+<dialog id="track" class="m-auto w-[calc(100%-2rem)] max-w-md rounded-2xl bg-surface p-0 text-ink shadow-2xl" aria-labelledby="track-title">
+  <div class="p-6 sm:p-8">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h2 id="track-title" class="font-display text-2xl font-bold">{{.Title}}</h2>
+        <p class="mt-1 text-sm text-ink-muted">{{.Body}}</p>
+      </div>
+      <form method="dialog">
+        <button type="submit" class="-m-2 inline-flex size-10 items-center justify-center rounded-lg text-ink-muted hover:bg-surface-muted hover:text-ink" aria-label="Close">{{icon "x" "size-5"}}</button>
+      </form>
+    </div>
+    <form action="/api/track" method="post" class="mt-6"
+          hx-post="/api/track"
+          hx-target="#track-result"
+          hx-swap="innerHTML"
+          hx-indicator="#track-submit"
+          hx-disable="find button">
+      <label for="track-number" class="field-label text-ink-muted">{{.InputLabel}}</label>
+      <div class="flex gap-2">
+        <input id="track-number" name="tracking_number" type="text" required minlength="4" maxlength="40"
+               pattern="[A-Za-z0-9\-]{4,40}" autocomplete="off" autocapitalize="characters" spellcheck="false"
+               class="field-light" aria-describedby="track-hint">
+        <button id="track-submit" type="submit" class="btn-primary relative shrink-0 px-5">
+          <span class="htmx-hide-on-request">{{.SubmitLabel}}</span>
+          <span class="htmx-indicator absolute inset-0 flex items-center justify-center" aria-hidden="true">
+            <svg class="size-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-90" fill="currentColor" d="M4 12a8 8 0 0 1 8-8v4a4 4 0 0 0-4 4H4z"/></svg>
+          </span>
+        </button>
+      </div>
+      <p id="track-hint" class="mt-1.5 text-xs text-ink-muted">{{.InputHint}}</p>
+    </form>
+    <div id="track-result" class="mt-4" aria-live="polite"></div>
+  </div>
+</dialog>
+{{- end}}
+{{end}}

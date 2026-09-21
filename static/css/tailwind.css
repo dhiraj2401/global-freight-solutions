@@ -1,0 +1,235 @@
+/*
+ * Tailwind CSS v4 input (CSS-first configuration: no tailwind.config.js).
+ * Build:  make css      (or ./bin/tailwindcss -i static/css/tailwind.css -o static/css/app.css --minify)
+ * The compiled static/css/app.css is committed so deploys need no Node/CLI.
+ */
+@import "tailwindcss" source(none);
+
+@source "../../templates";
+@source "../js/app.js";
+
+/* theme.js always stamps data-theme, so dark: follows the resolved theme. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Outfit", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --color-accent-50: #fdf2eb;
+  --color-accent-100: #fbe3d4;
+  --color-accent-300: #f0a46f;
+  --color-accent-400: #e97f45;
+  --color-accent-500: #d9642e;
+  --color-accent-600: #c2531f;
+  --color-accent-700: #9f4318;
+
+  --color-espresso-950: #160f0a;
+  --color-espresso-900: #1f150e;
+  --color-espresso-800: #2b1d14;
+  --color-espresso-700: #3a281c;
+  --color-espresso-600: #4d3627;
+
+  --animate-marquee: marquee 40s linear infinite;
+  @keyframes marquee {
+    to { transform: translateX(-50%); }
+  }
+}
+
+/* Theme-dependent semantic colors. Utilities reference the variables
+   directly, so switching data-theme or OS preference needs no dark: classes. */
+@theme inline {
+  --color-canvas: var(--gfs-canvas);
+  --color-canvas-alt: var(--gfs-canvas-alt);
+  --color-surface: var(--gfs-surface);
+  --color-surface-muted: var(--gfs-surface-muted);
+  --color-ink: var(--gfs-ink);
+  --color-ink-muted: var(--gfs-ink-muted);
+  --color-line: var(--gfs-line);
+  --color-chip: var(--gfs-chip);
+  --color-panel: var(--gfs-panel);
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --gfs-canvas: #fbf8f3;
+    --gfs-canvas-alt: #f7efe7;
+    --gfs-surface: #ffffff;
+    --gfs-surface-muted: #f2e9e1;
+    --gfs-ink: #17120e;
+    --gfs-ink-muted: #675d54;
+    --gfs-line: #eadfd4;
+    --gfs-chip: #fbe7db;
+    --gfs-panel: #2b1d14;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --gfs-canvas: #07080b;
+      --gfs-canvas-alt: #0b0e14;
+      --gfs-surface: #0e1420;
+      --gfs-surface-muted: #111a28;
+      --gfs-ink: #f4f4f5;
+      --gfs-ink-muted: #9ca3af;
+      --gfs-line: #1e2636;
+      --gfs-chip: rgb(217 100 46 / 0.16);
+      --gfs-panel: #111827;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --gfs-canvas: #07080b;
+    --gfs-canvas-alt: #0b0e14;
+    --gfs-surface: #0e1420;
+    --gfs-surface-muted: #111a28;
+    --gfs-ink: #f4f4f5;
+    --gfs-ink-muted: #9ca3af;
+    --gfs-line: #1e2636;
+    --gfs-chip: rgb(217 100 46 / 0.16);
+    --gfs-panel: #111827;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
+
+  /* Keep anchored sections clear of the sticky header. */
+  section[id], [id="track"] { scroll-margin-top: 5rem; }
+
+  body {
+    @apply bg-canvas text-ink font-sans antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent-500);
+    outline-offset: 2px;
+  }
+}
+
+/* Base building blocks defined as utilities so other classes can @apply them
+   (Tailwind v4 cannot @apply plain classes from @layer components). */
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-70;
+}
+
+@utility field {
+  @apply block w-full rounded-lg border px-3.5 py-3 text-sm transition-colors outline-none focus:ring-2 focus:ring-accent-500/40;
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
+  }
+
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.14em] text-accent-500;
+  }
+
+  .heading-xl {
+    @apply font-display text-4xl leading-[1.05] font-bold tracking-tight sm:text-5xl lg:text-6xl;
+  }
+
+  .heading-lg {
+    @apply font-display text-3xl leading-tight font-bold tracking-tight sm:text-4xl;
+  }
+
+  .btn-primary {
+    @apply btn bg-accent-500 text-white shadow-sm hover:bg-accent-600 active:bg-accent-700;
+  }
+
+  .btn-ghost-light {
+    @apply btn text-white hover:bg-white/10;
+  }
+
+  .card {
+    @apply rounded-2xl border border-line bg-surface;
+  }
+
+  .icon-chip {
+    @apply inline-flex shrink-0 items-center justify-center rounded-lg bg-chip text-accent-500;
+  }
+
+  .field-label {
+    @apply mb-1.5 block text-xs font-semibold;
+  }
+
+  /* Light card inputs (hero form) */
+  .field-light {
+    @apply field border-line bg-surface-muted text-ink placeholder:text-ink-muted/80 focus:border-accent-500;
+  }
+
+  /* Inputs on the dark contact panel */
+  .field-dark {
+    @apply field border-white/10 bg-white/5 text-white placeholder:text-white/40 focus:border-accent-400;
+  }
+
+  .field-light[aria-invalid="true"],
+  .field-dark[aria-invalid="true"] {
+    @apply border-red-500 focus:ring-red-500/30;
+  }
+
+  .field-error {
+    @apply mt-1 text-xs font-medium text-red-600;
+  }
+
+  .field-error-dark {
+    @apply mt-1 text-xs font-medium text-red-300;
+  }
+
+  .photo-cover {
+    @apply absolute inset-0 h-full w-full object-cover;
+  }
+
+  /* Fallback art shown when an image path is not configured. */
+  .photo-fallback {
+    @apply absolute inset-0 bg-espresso-800;
+    background-image:
+      radial-gradient(120% 80% at 80% 10%, rgb(217 100 46 / 0.35), transparent 60%),
+      linear-gradient(135deg, #2b1d14 0%, #160f0a 100%);
+  }
+}
+
+/* htmx 4 indicator styles (includeIndicatorCSS is disabled so the strict
+   CSP can forbid inline <style>). Delay avoids flashing on fast requests. */
+.htmx-indicator {
+  opacity: 0;
+  transition: opacity 150ms ease-in;
+}
+.htmx-request .htmx-indicator,
+.htmx-request.htmx-indicator {
+  opacity: 1;
+  transition-delay: 120ms;
+}
+.htmx-request .htmx-hide-on-request {
+  opacity: 0;
+}
+
+/* Scroll reveal. Only active once app.js has initialised, so content is never
+   hidden when JavaScript is unavailable. */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-ready [data-reveal] {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 700ms cubic-bezier(0.2, 0.7, 0.2, 1), transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .reveal-ready [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee { animation: none; }
+}
+
+dialog::backdrop {
+  background: rgb(22 15 10 / 0.6);
+  backdrop-filter: blur(4px);
+}
